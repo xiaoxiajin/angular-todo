@@ -17,6 +17,12 @@ export interface TodoItem{
 export class AppComponent {
   todolist: TodoItem[] = [];
   newTask: string ='';
+  constructor(){
+    const storedTask = localStorage.getItem('todolist');
+    if(storedTask){
+      this.todolist = JSON.parse(storedTask);
+    }
+  }
 
   addTask():void{
     if(this.newTask.trim() !== ''){
@@ -27,9 +33,14 @@ export class AppComponent {
       }
 
       this.todolist.push(newTodoItem)
+      this.saveToLocalStorage();
       //after clicking, the input should be cleared
       this.newTask = ''
     }
+  }
+
+  private saveToLocalStorage(): void {
+    localStorage.setItem('todolist', JSON.stringify(this.todolist));  // save the todolist to localStorage
   }
 
   toggleComplete(index: number):void{
@@ -42,6 +53,8 @@ export class AppComponent {
     this.todolist = this.todolist.filter(item => item.id !== id)
     // console.log(this.todolist)
   }
+
+
 
 
 }
